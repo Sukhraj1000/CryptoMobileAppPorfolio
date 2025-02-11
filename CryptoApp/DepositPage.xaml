@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CryptoApp.DepositPage">
+    
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <!-- Deposit Title -->
+        <Label Text="Deposit Funds" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+        
+        <!-- Amount Entry -->
+        <Border Padding="10" StrokeThickness="1">
+            <VerticalStackLayout>
+                <Label Text="Enter Amount" FontSize="18" FontAttributes="Bold"/>
+                <Entry x:Name="AmountEntry" Placeholder="0.00" Keyboard="Numeric" FontSize="18"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Currency Picker -->
+        <Label Text="Select Currency" FontSize="18" FontAttributes="Bold"/>
+        <Picker x:Name="CurrencyPicker">
+            <Picker.Items>
+                <x:String>USD</x:String>
+                <x:String>EUR</x:String>
+                <x:String>GBP</x:String>
+                <x:String>BTC</x:String>
+                <x:String>ETH</x:String>
+            </Picker.Items>
+        </Picker>
+
+        <!-- Deposit Button -->
+        <Button Text="Deposit" BackgroundColor="Green" TextColor="White" FontSize="18"/>
+    </VerticalStackLayout>
+</ContentPage>
