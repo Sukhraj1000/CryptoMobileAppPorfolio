@@ -33,6 +33,7 @@
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/zh-Hans/Microsoft.Maui.Controls.resources.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/zh-Hant/Microsoft.Maui.Controls.resources.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/runtimeconfig.bin
+/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/CommunityToolkit.Mvvm.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/dotenv.net.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Microsoft.Extensions.Configuration.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Microsoft.Extensions.Configuration.Abstractions.dll
@@ -55,6 +56,10 @@
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Microsoft.Maui.Graphics.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/MimeMapping.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Newtonsoft.Json.dll
+/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/SQLite-net.dll
+/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/SQLitePCLRaw.batteries_v2.dll
+/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/SQLitePCLRaw.core.dll
+/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/SQLitePCLRaw.provider.sqlite3.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Supabase.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Supabase.Core.dll
 /Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/bin/Debug/net9.0-ios/iossimulator-arm64/publish/../CryptoApp.app/Supabase.Functions.dll

@@ -60,14 +60,35 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="dotenv.net" Version="3.2.1" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
+        <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
         <PackageReference Include="supabase" Version="1.1.1" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Helpers\" />
       <Folder Include="Resources\Images\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <MauiXaml Update="Views\PortfolioPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\DepositPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\EditTransactionPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\SettingsPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
+      <MauiXaml Update="Views\LoginPage.xaml">
+        <SubType>Designer</SubType>
+      </MauiXaml>
     </ItemGroup>
 
 </Project>

@@ -3,6 +3,11 @@ build_property.EnableAotAnalyzer =
 build_property.EnableSingleFileAnalyzer = 
 build_property.EnableTrimAnalyzer = false
 build_property.IncludeAllContentForSelfExtract = 
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property._MvvmToolkitIsUsingWindowsRuntimePack = false
+build_property.CsWinRTComponent = 
+build_property.CsWinRTAotOptimizerEnabled = 
+build_property.CsWinRTAotWarningLevel = 
 build_property.TargetFramework = net9.0-ios
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = 
@@ -30,18 +35,6 @@ build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/DepositPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.DepositPage.xaml
-build_metadata.AdditionalFiles.TargetPath = DepositPage.xaml
-build_metadata.AdditionalFiles.RelativePath = DepositPage.xaml
-
-[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/MainPage.xaml]
-build_metadata.AdditionalFiles.GenKind = Xaml
-build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.MainPage.xaml
-build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
-build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
-
 [/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Resources.Styles.Colors.xaml
@@ -53,3 +46,39 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources/Styles/Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources/Styles/Styles.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/DepositPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.DepositPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/DepositPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/DepositPage.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/EditTransactionPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.EditTransactionPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/EditTransactionPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/EditTransactionPage.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/HomePage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.HomePage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/HomePage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/HomePage.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/LoginPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.LoginPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/LoginPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/LoginPage.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/PortfolioPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.PortfolioPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/PortfolioPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/PortfolioPage.xaml
+
+[/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/Views/SettingsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = CryptoApp.Views.SettingsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views/SettingsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views/SettingsPage.xaml
