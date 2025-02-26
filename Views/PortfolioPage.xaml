@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
+             x:Class="CryptoApp.Views.PortfolioPage"
+             Title="Portfolio"
+             x:DataType="viewModels:PortfolioViewModel">
+
+    <VerticalStackLayout Padding="20">
+        <Button Text="Add Transaction" BackgroundColor="Green" TextColor="White"/>
+        <CollectionView ItemsSource="{Binding Transactions}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="White" Padding="10" StrokeThickness="1" Margin="5">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding CryptoName}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="Amount: {Binding Amount}" FontSize="16"/>
+                            <Label Text="Buy Price: {Binding BuyPrice}" FontSize="16"/>
+                            <Button Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PortfolioViewModel}}, Path=DeleteTransactionCommand}" CommandParameter="{Binding}" BackgroundColor="Red" TextColor="White"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </VerticalStackLayout>
+</ContentPage>
