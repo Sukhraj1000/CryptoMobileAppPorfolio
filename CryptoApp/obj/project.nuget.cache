@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "DZoAMF2PnG4=",
+  "dgSpecHash": "d6RiWg5m4lM=",
   "success": true,
   "projectFilePath": "/Users/sukhrajkalon/Desktop/Final Year/6002/CryptoApp/CryptoApp/CryptoApp.csproj",
   "expectedPackageFiles": [
@@ -53,7 +53,7 @@
     "/Users/sukhrajkalon/.nuget/packages/system.runtime.compilerservices.unsafe/4.5.2/system.runtime.compilerservices.unsafe.4.5.2.nupkg.sha512",
     "/Users/sukhrajkalon/.nuget/packages/system.runtime.interopservices.nfloat.internal/6.0.1/system.runtime.interopservices.nfloat.internal.6.0.1.nupkg.sha512",
     "/Users/sukhrajkalon/.nuget/packages/system.threading.channels/8.0.0/system.threading.channels.8.0.0.nupkg.sha512",
-    "/Users/sukhrajkalon/.nuget/packages/websocket.client/5.1.1/websocket.client.5.1.1.nupkg.sha512",
+    "/Users/sukhrajkalon/.nuget/packages/websocket.client/5.1.2/websocket.client.5.1.2.nupkg.sha512",
     "/Users/sukhrajkalon/.nuget/packages/xamarin.android.glide/4.16.0.6/xamarin.android.glide.4.16.0.6.nupkg.sha512",
     "/Users/sukhrajkalon/.nuget/packages/xamarin.android.glide.annotations/4.16.0.6/xamarin.android.glide.annotations.4.16.0.6.nupkg.sha512",
     "/Users/sukhrajkalon/.nuget/packages/xamarin.android.glide.disklrucache/4.16.0.6/xamarin.android.glide.disklrucache.4.16.0.6.nupkg.sha512",

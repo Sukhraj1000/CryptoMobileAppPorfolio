@@ -1,11 +1,11 @@
 using CryptoApp.Models;
 
-namespace CryptoApp.Interfaces; 
-
 public interface IDatabaseService
 {
-    Task<int> AddTransactionAsync(Transaction transaction);
+    Task InitializeAsync();
+    Task<List<Transaction>> GetAllHoldingsAsync();
     Task<List<Transaction>> GetTransactionsAsync();
-    Task<int> UpdateTransactionAsync(Transaction transaction);
-    Task<int> DeleteTransactionAsync(Transaction transaction);
+    Task AddTransactionAsync(Transaction transaction);
+    Task DeleteTransactionAsync(Transaction transaction);
+    Task TestSupabaseConnection();
 }

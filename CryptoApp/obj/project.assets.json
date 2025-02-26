@@ -832,7 +832,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -3631,7 +3631,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -6368,7 +6368,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -7157,7 +7157,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -8040,7 +8040,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -8833,7 +8833,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Websocket.Client/5.1.1": {
+      "Websocket.Client/5.1.2": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
@@ -10597,10 +10597,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Websocket.Client/5.1.1": {
-      "sha512": "VpQV6b8HRnw6bFFIPTOOMtOxba3/viH9K2U2LdOYNjQ2b2HrLHxjodmJr3nPwyNSrtrRPr1RDwOMJ5qqlPnCVg==",
+    "Websocket.Client/5.1.2": {
+      "sha512": "ZE5VoUCIYbfACGmXxgfD96i4W0wyBk0JEwIViyPpvxdk/pNfzh2SX9BgEj8fTqNaxlFl0bUTWq1UUvR/c18BTQ==",
       "type": "package",
-      "path": "websocket.client/5.1.1",
+      "path": "websocket.client/5.1.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -10615,7 +10615,7 @@
         "lib/net8.0/Websocket.Client.xml",
         "lib/netstandard2.1/Websocket.Client.dll",
         "lib/netstandard2.1/Websocket.Client.xml",
-        "websocket.client.5.1.1.nupkg.sha512",
+        "websocket.client.5.1.2.nupkg.sha512",
         "websocket.client.nuspec"
       ]
     },
@@ -12520,6 +12520,8 @@
       "Microsoft.Extensions.Logging.Debug >= 9.0.0",
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Supabase.Postgrest >= 4.0.3",
+      "Websocket.Client >= 5.1.2",
       "dotenv.net >= 3.2.1",
       "sqlite-net-pcl >= 1.9.172",
       "supabase >= 1.1.1"
@@ -12529,6 +12531,8 @@
       "Microsoft.Extensions.Logging.Debug >= 9.0.0",
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Supabase.Postgrest >= 4.0.3",
+      "Websocket.Client >= 5.1.2",
       "dotenv.net >= 3.2.1",
       "sqlite-net-pcl >= 1.9.172",
       "supabase >= 1.1.1"
@@ -12538,6 +12542,8 @@
       "Microsoft.Extensions.Logging.Debug >= 9.0.0",
       "Microsoft.Maui.Controls >= 9.0.14",
       "Microsoft.NET.ILLink.Tasks >= 9.0.1",
+      "Supabase.Postgrest >= 4.0.3",
+      "Websocket.Client >= 5.1.2",
       "dotenv.net >= 3.2.1",
       "sqlite-net-pcl >= 1.9.172",
       "supabase >= 1.1.1"
@@ -12616,6 +12622,14 @@
             "version": "[9.0.1, )",
             "autoReferenced": true
           },
+          "Supabase.Postgrest": {
+            "target": "Package",
+            "version": "[4.0.3, )"
+          },
+          "Websocket.Client": {
+            "target": "Package",
+            "version": "[5.1.2, )"
+          },
           "dotenv.net": {
             "target": "Package",
             "version": "[3.2.1, )"
@@ -12671,6 +12685,14 @@
             "version": "[9.0.1, )",
             "autoReferenced": true
           },
+          "Supabase.Postgrest": {
+            "target": "Package",
+            "version": "[4.0.3, )"
+          },
+          "Websocket.Client": {
+            "target": "Package",
+            "version": "[5.1.2, )"
+          },
           "dotenv.net": {
             "target": "Package",
             "version": "[3.2.1, )"
@@ -12725,6 +12747,14 @@
             "target": "Package",
             "version": "[9.0.1, )",
             "autoReferenced": true
+          },
+          "Supabase.Postgrest": {
+            "target": "Package",
+            "version": "[4.0.3, )"
+          },
+          "Websocket.Client": {
+            "target": "Package",
+            "version": "[5.1.2, )"
           },
           "dotenv.net": {
             "target": "Package",

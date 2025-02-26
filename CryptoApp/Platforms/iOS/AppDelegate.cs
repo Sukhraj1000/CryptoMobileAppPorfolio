@@ -1,5 +1,6 @@
 ﻿using Foundation;
 
+
 namespace CryptoApp;
 
 [Register("AppDelegate")]

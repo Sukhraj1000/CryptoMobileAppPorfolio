@@ -1,17 +1,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
              x:Class="CryptoApp.Views.HomePage"
+             x:DataType="viewModels:HomeViewModel"
              Title="Home">
-    
+
     <VerticalStackLayout Padding="20">
         <Label Text="Welcome to Your Crypto Portfolio!" 
                FontSize="24" 
                FontAttributes="Bold" 
                HorizontalOptions="Center"/>
-        
-        <Button Text="Go to Portfolio" 
-                BackgroundColor="Blue" 
-                TextColor="White"/>
+        <Label Text="{Binding TotalPortfolioValue, StringFormat='Portfolio Value: {0:C}'}"/>
+        <Label Text="{Binding PortfolioChange, StringFormat='Change: {0:N2}%'}"/>
+        <CollectionView ItemsSource="{Binding Watchlist}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <StackLayout>
+                        <Label Text="{Binding Name}" />
+                        <Label Text="{Binding Price, StringFormat='${0:F2}'}" />
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Text="Add Sample Transaction" Command="{Binding AddSampleCommand}"/>
+        <Button Text="Refresh Prices" Command="{Binding RefreshCommand}" />
+
+
     </VerticalStackLayout>
 
 </ContentPage>

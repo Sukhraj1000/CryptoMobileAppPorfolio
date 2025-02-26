@@ -1,4 +1,6 @@
-﻿namespace CryptoApp;
+﻿using Microsoft.Maui.Controls;
+
+namespace CryptoApp;
 
 public partial class AppShell : Shell
 {

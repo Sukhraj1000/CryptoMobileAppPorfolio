@@ -74,6 +74,14 @@
               "version": "[9.0.1, )",
               "autoReferenced": true
             },
+            "Supabase.Postgrest": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Websocket.Client": {
+              "target": "Package",
+              "version": "[5.1.2, )"
+            },
             "dotenv.net": {
               "target": "Package",
               "version": "[3.2.1, )"
@@ -129,6 +137,14 @@
               "version": "[9.0.1, )",
               "autoReferenced": true
             },
+            "Supabase.Postgrest": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Websocket.Client": {
+              "target": "Package",
+              "version": "[5.1.2, )"
+            },
             "dotenv.net": {
               "target": "Package",
               "version": "[3.2.1, )"
@@ -183,6 +199,14 @@
               "target": "Package",
               "version": "[9.0.1, )",
               "autoReferenced": true
+            },
+            "Supabase.Postgrest": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "Websocket.Client": {
+              "target": "Package",
+              "version": "[5.1.2, )"
             },
             "dotenv.net": {
               "target": "Package",

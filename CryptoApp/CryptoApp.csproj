@@ -66,10 +66,11 @@
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
         <PackageReference Include="supabase" Version="1.1.1" />
+        <PackageReference Include="Supabase.Postgrest" Version="4.0.3" />
+        <PackageReference Include="Websocket.Client" Version="5.1.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Helpers\" />
       <Folder Include="Resources\Images\" />
     </ItemGroup>
 
