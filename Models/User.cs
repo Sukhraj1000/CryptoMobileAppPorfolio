@@ -1,8 +1,19 @@
-namespace CryptoApp.Models;
+using Supabase.Postgrest.Models;
+using System;
 
-public class User
+namespace CryptoApp.Models
 {
-    public string Id { get; set; } = string.Empty; 
-    public string Email { get; set; } = string.Empty;
-    public string Password { get; set; } = string.Empty;
+    [Supabase.Postgrest.Attributes.Table("users")]
+    public class User : BaseModel
+    {
+        [Supabase.Postgrest.Attributes.PrimaryKey("userid", false)]
+        public Guid Id { get; set; }
+
+        [Supabase.Postgrest.Attributes.Column("username")]
+        public string Username { get; set; } = string.Empty;
+        
+
+        [Supabase.Postgrest.Attributes.Column("balance")]
+        public decimal Balance { get; set; }
+    }
 }

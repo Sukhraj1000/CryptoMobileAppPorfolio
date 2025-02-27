@@ -1,13 +1,13 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CryptoApp.Interfaces;
 using CryptoApp.Models;
 using CryptoApp.Services;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CryptoApp.ViewModels;
 
@@ -34,14 +34,12 @@ public class HomeViewModel : ObservableObject
     }
 
     public ICommand RefreshCommand { get; }
-    public ICommand AddSampleCommand { get; }
 
     public HomeViewModel(CryptoService cryptoService, IDatabaseService databaseService)
     {
         _cryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
         _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
 
-        AddSampleCommand = new AsyncRelayCommand(AddSampleTransaction);
         RefreshCommand = new AsyncRelayCommand(FetchLiveCryptoPrices);
 
         _cryptoService.PriceUpdates.Subscribe(asset =>
@@ -84,7 +82,7 @@ public class HomeViewModel : ObservableObject
         PortfolioHoldings.Clear();
         foreach (var holding in holdings)
         {
-            var latestPrice = _cryptoService.GetLatestPrice(holding.Symbol);
+            var latestPrice = await _cryptoService.GetLatestPrice(holding.Symbol);
             if (latestPrice > 0)
             {
                 TotalPortfolioValue += latestPrice * holding.Amount;
@@ -116,21 +114,5 @@ public class HomeViewModel : ObservableObject
 
         OnPropertyChanged(nameof(TotalPortfolioValue));
         OnPropertyChanged(nameof(PortfolioChange));
-    }
-
-    private async Task AddSampleTransaction()
-    {
-        var sampleTransaction = new Transaction
-        {
-            CryptoName = "Ethereum",
-            Symbol = "ETH",
-            Amount = 1.0m,
-            BuyPrice = 3000.00m,
-            Currency = "USD",
-            Date = DateTime.UtcNow 
-        };
-
-        await _databaseService.AddTransactionAsync(sampleTransaction);
-        await LoadPortfolioData();
     }
 }

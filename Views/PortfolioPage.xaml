@@ -1,26 +1,64 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
              x:Class="CryptoApp.Views.PortfolioPage"
              Title="Portfolio"
-             x:DataType="viewModels:PortfolioViewModel">
+             BackgroundColor="White">
 
     <VerticalStackLayout Padding="20">
-        <Button Text="Add Transaction" BackgroundColor="Green" TextColor="White"/>
-        <CollectionView ItemsSource="{Binding Transactions}">
+
+        <!-- User Balance -->
+        <Border StrokeShape="RoundRectangle 10">
+            <VerticalStackLayout Padding="10" BackgroundColor="#F5F5F5">
+                <Label Text="Available Balance" FontSize="18" TextColor="Black"/>
+                <Label Text="{Binding UserBalance, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold" TextColor="Green"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Buttons for Buy and Sell -->
+        <HorizontalStackLayout Spacing="10" Margin="10,20,10,10">
+            <Button Text="Buy" Command="{Binding ToggleBuySection}" BackgroundColor="Green" TextColor="White"/>
+            <Button Text="Sell" Command="{Binding ToggleSellSection}" BackgroundColor="Red" TextColor="White"/>
+        </HorizontalStackLayout>
+
+        <!-- Buy Section -->
+        <StackLayout IsVisible="{Binding IsBuySectionVisible}">
+            <Picker Title="Select Crypto" ItemsSource="{Binding AvailableCryptos}" SelectedItem="{Binding SelectedBuyCrypto}" />
+            <Entry Placeholder="Amount to Buy" Keyboard="Numeric" Text="{Binding BuyAmount}" />
+            <Button Text="Confirm Buy" Command="{Binding BuyCryptoCommand}" BackgroundColor="Blue" TextColor="White"/>
+        </StackLayout>
+
+        <!-- Sell Section -->
+        <StackLayout IsVisible="{Binding IsSellSectionVisible}">
+            <Picker Title="Select Crypto" ItemsSource="{Binding AvailableCryptos}" SelectedItem="{Binding SelectedSellCrypto}" />
+            <Entry Placeholder="Amount to Sell" Keyboard="Numeric" Text="{Binding SellAmount}" />
+            <Button Text="Confirm Sell" Command="{Binding SellCryptoCommand}" BackgroundColor="Blue" TextColor="White"/>
+        </StackLayout>
+
+        <!-- Portfolio Value -->
+        <Border StrokeShape="RoundRectangle 10">
+            <VerticalStackLayout Padding="10" BackgroundColor="#F5F5F5">
+                <Label Text="Total Portfolio Value" FontSize="18" TextColor="Black"/>
+                <Label Text="{Binding TotalPortfolioValue, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold"/>
+                <Label Text="{Binding PortfolioChange, StringFormat='{0:N2}% Change'}" FontSize="16"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Holdings List -->
+        <CollectionView ItemsSource="{Binding PortfolioHoldings}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border BackgroundColor="White" Padding="10" StrokeThickness="1" Margin="5">
-                        <VerticalStackLayout>
+                    <Border StrokeShape="RoundRectangle 10">
+                        <HorizontalStackLayout Padding="10" BackgroundColor="White">
                             <Label Text="{Binding CryptoName}" FontSize="18" FontAttributes="Bold"/>
-                            <Label Text="Amount: {Binding Amount}" FontSize="16"/>
-                            <Label Text="Buy Price: {Binding BuyPrice}" FontSize="16"/>
-                            <Button Text="Delete" Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:PortfolioViewModel}}, Path=DeleteTransactionCommand}" CommandParameter="{Binding}" BackgroundColor="Red" TextColor="White"/>
-                        </VerticalStackLayout>
+                            <Label Text="{Binding Symbol}" FontSize="14" TextColor="Gray" Margin="10,0,0,0"/>
+                            <Label Text="{Binding Amount, StringFormat='Qty: {0:N4}'}" FontSize="14" HorizontalOptions="EndAndExpand"/>
+                            <Label Text="{Binding BuyPrice, StringFormat='${0:N2}'}" FontSize="14" HorizontalOptions="End"/>
+                        </HorizontalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

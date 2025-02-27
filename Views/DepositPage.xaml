@@ -3,16 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CryptoApp.Views.DepositPage"
              Title="Deposit">
-    
     <VerticalStackLayout Padding="20">
-        <Label Text="Add a Crypto Purchase" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+        <Label Text="Available Balance" FontSize="18"/>
+        <Label Text="{Binding UserBalance, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold"/>
 
-        <Entry Placeholder="Crypto Name" Text="{Binding NewTransaction.CryptoName}"/>
-        <Entry Placeholder="Amount" Keyboard="Numeric" Text="{Binding NewTransaction.Amount}"/>
-        <Entry Placeholder="Buy Price" Keyboard="Numeric" Text="{Binding NewTransaction.BuyPrice}"/>
-        <Entry Placeholder="Currency" Text="{Binding NewTransaction.Currency}"/>
+        <Entry Placeholder="Enter deposit amount" Keyboard="Numeric" Text="{Binding DepositAmount}" />
+        <Button Text="Deposit" Command="{Binding DepositCommand}" BackgroundColor="Green" TextColor="White"/>
 
-        <Button Text="Add Transaction" Command="{Binding AddTransactionCommand}" BackgroundColor="Green" TextColor="White"/>
+        <ListView ItemsSource="{Binding UserDeposits}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextCell Text="{Binding Amount, StringFormat='Deposited: ${0:N2}'}"
+                              Detail="{Binding Date, StringFormat='Date: {0:MM/dd/yyyy HH:mm}'}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </VerticalStackLayout>
-
 </ContentPage>

@@ -62,18 +62,28 @@ namespace CryptoApp.Services
             }
         }
 
-        public decimal GetLatestPrice(string symbol)
+        public async Task<decimal> GetLatestPrice(string symbol)
         {
-            decimal latestPrice = 0;
-            _priceUpdates.Subscribe(asset =>
+            try
             {
-                if (asset.Symbol.Equals(symbol, StringComparison.OrdinalIgnoreCase))
-                {
-                    latestPrice = asset.Price;
-                }
-            });
+                string url = $"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd";
+                HttpResponseMessage response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
 
-            return latestPrice;
+                string json = await response.Content.ReadAsStringAsync();
+                var priceData = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, decimal>>>(json);
+
+                if (priceData != null && priceData.TryGetValue(symbol, out var price))
+                {
+                    return price["usd"];
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Failed to fetch price for {symbol}: {ex.Message}");
+            }
+
+            return 0;
         }
     }
 }

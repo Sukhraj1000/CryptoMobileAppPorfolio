@@ -4,9 +4,18 @@
        x:Class="CryptoApp.AppShell">
        
     <TabBar>
-        <ShellContent Title="Home" ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage"/>
-        <ShellContent Title="Portfolio" ContentTemplate="{DataTemplate views:PortfolioPage}" Route="PortfolioPage"/>
-        <ShellContent Title="Deposit" ContentTemplate="{DataTemplate views:DepositPage}" Route="DepositPage"/>
-        <ShellContent Title="Settings" ContentTemplate="{DataTemplate views:SettingsPage}" Route="SettingsPage"/>
+        <Tab Title="Home">
+            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
+        </Tab>
+        <Tab Title="Portfolio">
+            <ShellContent ContentTemplate="{DataTemplate views:PortfolioPage}" />
+        </Tab>
+        <Tab Title="Deposit">
+            <ShellContent ContentTemplate="{DataTemplate views:DepositPage}" />
+        </Tab>
+        <Tab Title="Settings">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+        </Tab>
     </TabBar>
+
 </Shell>

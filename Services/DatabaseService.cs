@@ -29,11 +29,11 @@ namespace CryptoApp.Services
             try
             {
                 await _client.InitializeAsync();
-                Console.WriteLine(" Supabase Initialised");
+                Console.WriteLine("Supabase Initialized.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"ERROR: Failed to initialise Supabase: {ex.Message}");
+                Console.WriteLine($"ERROR: Failed to initialize Supabase: {ex.Message}");
             }
         }
         public async Task TestSupabaseConnection()
@@ -42,7 +42,7 @@ namespace CryptoApp.Services
             {
                 var transactions = await _client.From<Transaction>().Get();
                 Console.WriteLine($"Transactions Fetched: {transactions.Models.Count}");
-        
+
                 foreach (var tx in transactions.Models)
                 {
                     Console.WriteLine($"{tx.Id} | {tx.CryptoName} | {tx.Symbol} | {tx.Amount}");
@@ -54,55 +54,77 @@ namespace CryptoApp.Services
             }
         }
 
-        public async Task<List<Transaction>> GetAllHoldingsAsync()
+        public async Task<User> GetUserByIdAsync(Guid userId)
+        {
+            var userIdString = userId.ToString(); 
+
+            var userResponse = await _client
+                .From<User>()
+                .Filter("userid", Constants.Operator.Equals, userIdString) 
+                .Single();
+
+            return userResponse;
+        }
+
+        public async Task<List<Deposit>> GetUserDepositsAsync(Guid userId)
+        {
+            var response = await _client.From<Deposit>()
+                .Filter("userid", Constants.Operator.Equals, userId)
+                .Get();
+
+            return response.Models;
+        }
+
+        public async Task UpdateUserBalanceAsync(Guid userId, decimal newBalance)
         {
             try
             {
-                var response = await _client.From<Transaction>().Get();
-                return response.Models;
+                var user = await GetUserByIdAsync(userId);
+                if (user == null)
+                {
+                    Console.WriteLine("User not found. Cannot update balance.");
+                    return;
+                }
+
+                user.Balance = newBalance;
+
+                var response = await _client.From<User>().Update(user);
+                if (response.Models.Count > 0)
+                {
+                    Console.WriteLine($"Balance updated successfully: {newBalance}");
+                }
+                else
+                {
+                    Console.WriteLine("Failed to update user balance.");
+                }
             }
             catch (Exception ex)
             {
-                return new List<Transaction>();
+                Console.WriteLine($"ERROR updating balance: {ex.Message}");
             }
         }
 
-        public async Task<List<Transaction>> GetTransactionsAsync()
+        public async Task AddDepositAsync(Deposit deposit)
         {
-            try
-            {
-                var response = await _client.From<Transaction>().Get();
-                return response.Models;
-            }
-            catch (Exception ex)
-            {
-                return new List<Transaction>();
-            }
+            await _client.From<Deposit>().Insert(deposit);
+        }
+
+        public async Task<List<Transaction>> GetAllHoldingsAsync()
+        {
+            var response = await _client.From<Transaction>().Get();
+            return response.Models;
         }
 
         public async Task AddTransactionAsync(Transaction transaction)
         {
-            transaction.Date = DateTime.UtcNow; 
             await _client.From<Transaction>().Insert(transaction);
         }
 
-
-
-        public async Task DeleteTransactionAsync(Transaction transaction)
+        public async Task DeleteTransactionAsync(int transactionId)
         {
-            try
-            {
-                await _client
-                    .From<Transaction>()
-                    .Filter(t => t.Id, Constants.Operator.Equals, transaction.Id) 
-                    .Delete();
-
-                Console.WriteLine($"Transaction deleted: {transaction.Id}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($" ERROR deleting transaction: {ex.Message}");
-            }
+            await _client.From<Transaction>()
+                .Filter("id", Constants.Operator.Equals, transactionId)
+                .Delete();
         }
     }
 }
