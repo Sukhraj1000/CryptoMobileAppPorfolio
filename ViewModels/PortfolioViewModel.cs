@@ -15,6 +15,7 @@ namespace CryptoApp.ViewModels
     {
         private readonly CryptoService _cryptoService;
         private readonly IDatabaseService _databaseService;
+        private User _currentUser;
 
         public ObservableCollection<Transaction> PortfolioHoldings { get; private set; } = new();
         public ObservableCollection<string> AvailableCryptos { get; } = new() { "BTC", "ETH", "SOL" };
@@ -45,22 +46,6 @@ namespace CryptoApp.ViewModels
         public string SelectedSellCrypto { get; set; }
         public decimal SellAmount { get; set; }
 
-        private bool _isBuySectionVisible;
-        public bool IsBuySectionVisible
-        {
-            get => _isBuySectionVisible;
-            set => SetProperty(ref _isBuySectionVisible, value);
-        }
-
-        private bool _isSellSectionVisible;
-        public bool IsSellSectionVisible
-        {
-            get => _isSellSectionVisible;
-            set => SetProperty(ref _isSellSectionVisible, value);
-        }
-
-        public ICommand ToggleBuySection { get; }
-        public ICommand ToggleSellSection { get; }
         public ICommand BuyCryptoCommand { get; }
         public ICommand SellCryptoCommand { get; }
 
@@ -68,11 +53,15 @@ namespace CryptoApp.ViewModels
         {
             _cryptoService = cryptoService;
             _databaseService = databaseService;
-
-            ToggleBuySection = new RelayCommand(() => IsBuySectionVisible = !IsBuySectionVisible);
-            ToggleSellSection = new RelayCommand(() => IsSellSectionVisible = !IsSellSectionVisible);
             BuyCryptoCommand = new AsyncRelayCommand(BuyCrypto);
             SellCryptoCommand = new AsyncRelayCommand(SellCrypto);
+
+            _currentUser = AuthService.GetCurrentUser();
+            if (_currentUser == null)
+            {
+                Console.WriteLine("[ERROR] No user logged in!");
+                return;
+            }
 
             Task.Run(LoadPortfolioData);
         }
@@ -80,27 +69,27 @@ namespace CryptoApp.ViewModels
         private async Task BuyCrypto()
         {
             if (string.IsNullOrEmpty(SelectedBuyCrypto) || BuyAmount <= 0) return;
+            if (_currentUser == null) return;
 
             var latestPrice = await _cryptoService.GetLatestPrice(SelectedBuyCrypto);
             if (latestPrice <= 0) return;
 
             decimal totalCost = latestPrice * BuyAmount;
-            if (UserBalance < totalCost)
+            if (_currentUser.Balance < totalCost)
             {
-                Console.WriteLine("Insufficient funds.");
+                Console.WriteLine("[ERROR] Insufficient funds.");
                 return;
             }
 
-            UserBalance -= totalCost;
+            _currentUser.Balance -= totalCost;
+            await _databaseService.UpdateUserBalanceAsync(_currentUser.Id, _currentUser.Balance);
 
             var transaction = new Transaction
             {
-                CryptoName = SelectedBuyCrypto,
+                UserId = _currentUser.Id,
                 Symbol = SelectedBuyCrypto,
                 Amount = BuyAmount,
-                BuyPrice = latestPrice,
                 Currency = "USD",
-                Date = DateTime.UtcNow
             };
 
             await _databaseService.AddTransactionAsync(transaction);
@@ -110,11 +99,12 @@ namespace CryptoApp.ViewModels
         private async Task SellCrypto()
         {
             if (string.IsNullOrEmpty(SelectedSellCrypto) || SellAmount <= 0) return;
+            if (_currentUser == null) return;
 
             var holding = PortfolioHoldings.FirstOrDefault(h => h.Symbol == SelectedSellCrypto);
             if (holding == null || holding.Amount < SellAmount)
             {
-                Console.WriteLine("Not enough holdings to sell.");
+                Console.WriteLine("[ERROR] Not enough holdings to sell.");
                 return;
             }
 
@@ -122,10 +112,10 @@ namespace CryptoApp.ViewModels
             if (latestPrice <= 0) return;
 
             decimal totalRevenue = latestPrice * SellAmount;
-            UserBalance += totalRevenue;
+            _currentUser.Balance += totalRevenue;
+            await _databaseService.UpdateUserBalanceAsync(_currentUser.Id, _currentUser.Balance);
 
             holding.Amount -= SellAmount;
-
             if (holding.Amount == 0)
             {
                 await _databaseService.DeleteTransactionAsync(holding.Id);
@@ -133,7 +123,7 @@ namespace CryptoApp.ViewModels
             }
             else
             {
-                await _databaseService.AddTransactionAsync(holding);
+                await _databaseService.UpdateTransactionAsync(holding);
             }
 
             await LoadPortfolioData();
@@ -143,9 +133,6 @@ namespace CryptoApp.ViewModels
         {
             var holdings = await _databaseService.GetAllHoldingsAsync();
             if (holdings == null || holdings.Count == 0) return;
-
-            decimal previousValue = TotalPortfolioValue;
-            TotalPortfolioValue = 0;
 
             PortfolioHoldings.Clear();
             foreach (var holding in holdings)
@@ -158,7 +145,7 @@ namespace CryptoApp.ViewModels
                 PortfolioHoldings.Add(holding);
             }
 
-            PortfolioChange = previousValue == 0 ? 0 : ((TotalPortfolioValue - previousValue) / Math.Max(previousValue, 1)) * 100;
+            PortfolioChange = 0;
         }
     }
 }

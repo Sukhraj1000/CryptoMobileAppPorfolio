@@ -1,21 +1,22 @@
 using Supabase.Postgrest.Models;
+using Supabase.Postgrest.Attributes;
 using System;
 
 namespace CryptoApp.Models
 {
-    [Supabase.Postgrest.Attributes.Table("deposits")]
+    [Table("deposits")]
     public class Deposit : BaseModel
     {
-        [Supabase.Postgrest.Attributes.PrimaryKey("id", false)]
+        [PrimaryKey("id")]
         public int Id { get; set; }
 
-        [Supabase.Postgrest.Attributes.Column("userid")]
-        public Guid UserId { get; set; }
-
-        [Supabase.Postgrest.Attributes.Column("amount")]
+        [Column("amount")]
         public decimal Amount { get; set; }
 
-        [Supabase.Postgrest.Attributes.Column("date")]
-        public DateTime Date { get; set; }
+        [Column("deposit_date")]
+        public DateTime DepositDate { get; set; }
+
+        [Column("userid")]
+        public Guid UserId { get; set; }
     }
 }

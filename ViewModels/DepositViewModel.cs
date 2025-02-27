@@ -6,13 +6,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CryptoApp.Interfaces;
 using CryptoApp.Models;
+using CryptoApp.Services;
 
 namespace CryptoApp.ViewModels
 {
     public class DepositViewModel : ObservableObject
     {
         private readonly IDatabaseService _databaseService;
-        private Guid _userId = Guid.NewGuid(); // Replace with actual user ID logic
+        private User _currentUser;
 
         private decimal _depositAmount;
         public decimal DepositAmount
@@ -40,11 +41,12 @@ namespace CryptoApp.ViewModels
 
         private async Task LoadUserData()
         {
-            var user = await _databaseService.GetUserByIdAsync(_userId);
-            if (user != null)
+            // Get logged-in user
+            _currentUser = AuthService.GetCurrentUser(); 
+            if (_currentUser != null)
             {
-                UserBalance = user.Balance;
-                var deposits = await _databaseService.GetUserDepositsAsync(_userId);
+                UserBalance = _currentUser.Balance;
+                var deposits = await _databaseService.GetUserDepositsAsync(_currentUser.Id);
                 UserDeposits.Clear();
                 foreach (var deposit in deposits)
                 {
@@ -55,28 +57,27 @@ namespace CryptoApp.ViewModels
 
         private async Task DepositFunds()
         {
-            if (DepositAmount <= 0) return;
-
-            var user = await _databaseService.GetUserByIdAsync(_userId);
+            var user = AuthService.GetCurrentUser();
             if (user == null)
             {
-                Console.WriteLine("User does not exist. Cannot deposit.");
+                Console.WriteLine("[ERROR] No user is currently logged in!");
+                await Application.Current.MainPage.DisplayAlert("Error", "No user logged in!", "OK");
                 return;
             }
 
-            decimal newBalance = user.Balance + DepositAmount;
-            await _databaseService.UpdateUserBalanceAsync(_userId, newBalance);
+            if (DepositAmount <= 0) return;
 
             var deposit = new Deposit
             {
-                UserId = _userId,
+                UserId = user.Id,
                 Amount = DepositAmount,
-                Date = DateTime.UtcNow
+                DepositDate = DateTime.UtcNow
             };
 
             await _databaseService.AddDepositAsync(deposit);
-            UserDeposits.Add(deposit);
-            UserBalance = newBalance;
+            user.Balance += DepositAmount;
+            await _databaseService.UpdateUserBalanceAsync(user.Id, user.Balance);
         }
+
     }
 }

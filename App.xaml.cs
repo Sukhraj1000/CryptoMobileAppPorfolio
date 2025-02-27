@@ -1,17 +1,13 @@
-﻿using Microsoft.Maui;
+﻿using CryptoApp.Views;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
 
 namespace CryptoApp;
-
 public partial class App : Application
 {
-    public App()
+    public App(LoginPage loginPage)
     {
         InitializeComponent();
-    }
-
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        return new Window(new AppShell());
+        MainPage = new NavigationPage(loginPage); 
     }
 }

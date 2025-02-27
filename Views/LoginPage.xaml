@@ -2,16 +2,21 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CryptoApp.Views.LoginPage"
-             Title="Login">
-    
-    <VerticalStackLayout Padding="20">
+             Title="Login"
+             BackgroundColor="White">
+    <VerticalStackLayout Padding="20" Spacing="15">
+
         <Label Text="Login" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+        
+        <Entry Text="{Binding Username, Mode=TwoWay}" Placeholder="Username" 
+               ReturnType="Next" Completed="OnUsernameCompleted"/>
+        <Entry Text="{Binding Password, Mode=TwoWay}" Placeholder="Password" IsPassword="True"
+               ReturnType="Done" Completed="OnPasswordCompleted"/>
 
-        <Entry Placeholder="Email" Text="{Binding Email}"/>
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True"/>
+        <Button Text="Login"
+                Command="{Binding LoginCommand}"
+                BackgroundColor="Blue"
+                TextColor="White" />
 
-        <Button Text="Sign In" Command="{Binding LoginCommand}" BackgroundColor="Blue" TextColor="White"/>
-        <Button Text="Register" Command="{Binding RegisterCommand}" BackgroundColor="Gray" TextColor="White"/>
     </VerticalStackLayout>
-
 </ContentPage>

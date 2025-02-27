@@ -1,22 +1,32 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CryptoApp.Views.DepositPage"
              Title="Deposit">
-    <VerticalStackLayout Padding="20">
-        <Label Text="Available Balance" FontSize="18"/>
-        <Label Text="{Binding UserBalance, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold"/>
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Label Text="Deposit Funds" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
+        
+        <Entry Placeholder="Enter Amount"
+               Keyboard="Numeric"
+               Text="{Binding DepositAmount, Mode=TwoWay}"/>
+        
+        <Button Text="Deposit"
+                Command="{Binding DepositCommand}"
+                BackgroundColor="Blue"
+                TextColor="White"/>
 
-        <Entry Placeholder="Enter deposit amount" Keyboard="Numeric" Text="{Binding DepositAmount}" />
-        <Button Text="Deposit" Command="{Binding DepositCommand}" BackgroundColor="Green" TextColor="White"/>
+        <Label Text="Deposit History" FontSize="18" FontAttributes="Bold"/>
 
-        <ListView ItemsSource="{Binding UserDeposits}">
-            <ListView.ItemTemplate>
+        <CollectionView ItemsSource="{Binding UserDeposits}">
+            <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding Amount, StringFormat='Deposited: ${0:N2}'}"
-                              Detail="{Binding Date, StringFormat='Date: {0:MM/dd/yyyy HH:mm}'}"/>
+                    <Frame Padding="10" Margin="5">
+                        <StackLayout>
+                            <Label Text="{Binding Amount}" FontSize="16"/>
+                            <Label Text="{Binding DepositDate, StringFormat='yyyy-MM-dd HH:mm'}" FontSize="14" TextColor="Gray"/>
+                        </StackLayout>
+                    </Frame>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

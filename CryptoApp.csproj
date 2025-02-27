@@ -60,6 +60,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="dotenv.net" Version="3.2.1" />
         <PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />

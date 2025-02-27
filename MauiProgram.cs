@@ -5,9 +5,7 @@ using CryptoApp.Services;
 using CryptoApp.ViewModels;
 using CryptoApp.Views;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls.Hosting;
-using Microsoft.Maui.Hosting;
+
 
 namespace CryptoApp;
 
@@ -16,7 +14,16 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        
+
+        // Supabase Setup
+        var supabaseUrl = "https://jfukhwbyszlclqfhecmn.supabase.co";
+        var supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpmdWtod2J5c3psY2xxZmhlY21uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkyMTc3NDgsImV4cCI6MjA1NDc5Mzc0OH0.KikzTEL99_ngl6mzCpep76wFzcrEDi_aqRfed_SgApg";
+        var supabaseClient = new Supabase.Client(supabaseUrl, supabaseKey);
+
+        builder.Services.AddSingleton(supabaseClient);
+        builder.Services.AddSingleton<IAuthService, AuthService>();
+        builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+
         builder.UseMauiApp<App>();
 
         // Register Services
@@ -27,30 +34,33 @@ public static class MauiProgram
         builder.Services.AddSingleton<ListVisibilityConverter>();
 
         // Register ViewModels
+        builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddSingleton<HomeViewModel>();
         builder.Services.AddSingleton<PortfolioViewModel>();
         builder.Services.AddSingleton<DepositViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
         // Register Views
+        builder.Services.AddSingleton<LoginPage>();
         builder.Services.AddSingleton<HomePage>();
         builder.Services.AddSingleton<PortfolioPage>();
         builder.Services.AddSingleton<DepositPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
-        var mauiApp = builder.Build(); 
+        var mauiApp = builder.Build();
 
-        // Initialise Database AFTER building the app
-            Task.Run(async () =>
+        Task.Run(async () =>
         {
-            var dbService = mauiApp.Services.GetRequiredService<IDatabaseService>();
-            await dbService.InitializeAsync();
-    
-            // Runs the Supabase test
-            await dbService.TestSupabaseConnection();
+            try
+            {
+                await supabaseClient.InitializeAsync();  
+                Console.WriteLine("Supabase Initialized");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Supabase Initialization Error: {ex.Message}");
+            }
         });
-
-
         return mauiApp;
     }
 }
