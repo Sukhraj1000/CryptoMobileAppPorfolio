@@ -15,6 +15,7 @@ namespace CryptoApp.ViewModels
     {
         private readonly CryptoService _cryptoService;
         private readonly IDatabaseService _databaseService;
+        private readonly IAuthService _authService;
         private User _currentUser;
 
         public ObservableCollection<Transaction> PortfolioHoldings { get; private set; } = new();
@@ -43,18 +44,18 @@ namespace CryptoApp.ViewModels
 
         public string SelectedBuyCrypto { get; set; }
         public decimal BuyAmount { get; set; }
-        public string SelectedSellCrypto { get; set; }
-        public decimal SellAmount { get; set; }
 
         public ICommand BuyCryptoCommand { get; }
-        public ICommand SellCryptoCommand { get; }
+        public ICommand RefreshPortfolioCommand { get; }
 
-        public PortfolioViewModel(CryptoService cryptoService, IDatabaseService databaseService)
+        public PortfolioViewModel(CryptoService cryptoService, IDatabaseService databaseService, IAuthService authService)
         {
-            _cryptoService = cryptoService;
-            _databaseService = databaseService;
+            _cryptoService = cryptoService ?? throw new ArgumentNullException(nameof(cryptoService));
+            _databaseService = databaseService ?? throw new ArgumentNullException(nameof(databaseService));
+            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+
             BuyCryptoCommand = new AsyncRelayCommand(BuyCrypto);
-            SellCryptoCommand = new AsyncRelayCommand(SellCrypto);
+            RefreshPortfolioCommand = new AsyncRelayCommand(RefreshPortfolioValue);
 
             _currentUser = AuthService.GetCurrentUser();
             if (_currentUser == null)
@@ -63,7 +64,17 @@ namespace CryptoApp.ViewModels
                 return;
             }
 
-            Task.Run(LoadPortfolioData);
+            Task.Run(LoadUserBalance);
+            Task.Run(RefreshPortfolioValue);
+        }
+
+        private async Task LoadUserBalance()
+        {
+            if (_currentUser == null) return;
+
+            Console.WriteLine($"[DEBUG] Loading cash balance for User ID: {_currentUser.Id}");
+            UserBalance = await _databaseService.GetUserBalanceAsync(_currentUser.Id);
+            Console.WriteLine($"[DEBUG] Loaded available balance: {UserBalance}");
         }
 
         private async Task BuyCrypto()
@@ -72,7 +83,11 @@ namespace CryptoApp.ViewModels
             if (_currentUser == null) return;
 
             var latestPrice = await _cryptoService.GetLatestPrice(SelectedBuyCrypto);
-            if (latestPrice <= 0) return;
+            if (latestPrice <= 0)
+            {
+                Console.WriteLine("[ERROR] Failed to fetch latest price.");
+                return;
+            }
 
             decimal totalCost = latestPrice * BuyAmount;
             if (_currentUser.Balance < totalCost)
@@ -81,71 +96,114 @@ namespace CryptoApp.ViewModels
                 return;
             }
 
+            // Deduct from User Cash Balance
             _currentUser.Balance -= totalCost;
             await _databaseService.UpdateUserBalanceAsync(_currentUser.Id, _currentUser.Balance);
 
+            // Update Crypto Holdings in Wallet
+            await _databaseService.UpdateCryptoBalanceAsync(_currentUser.Id, SelectedBuyCrypto, BuyAmount);
+
+            // Store Transaction Record
             var transaction = new Transaction
             {
                 UserId = _currentUser.Id,
-                Symbol = SelectedBuyCrypto,
+                CryptoSymbol = SelectedBuyCrypto,
                 Amount = BuyAmount,
-                Currency = "USD",
+                PriceAtTransaction = latestPrice,
+                TotalValue = totalCost,
+                TransactionType = "BUY",
+                TransactionDate = DateTime.UtcNow
             };
-
             await _databaseService.AddTransactionAsync(transaction);
-            await LoadPortfolioData();
+
+            Console.WriteLine($"[DEBUG] Bought {BuyAmount} {SelectedBuyCrypto} at ${latestPrice}");
+
+            //  Load Updated Balances & Portfolio
+            await LoadUserBalance();
+            await RefreshPortfolioValue();
         }
 
-        private async Task SellCrypto()
+        public async Task RefreshPortfolioValue()
         {
-            if (string.IsNullOrEmpty(SelectedSellCrypto) || SellAmount <= 0) return;
-            if (_currentUser == null) return;
-
-            var holding = PortfolioHoldings.FirstOrDefault(h => h.Symbol == SelectedSellCrypto);
-            if (holding == null || holding.Amount < SellAmount)
+            try
             {
-                Console.WriteLine("[ERROR] Not enough holdings to sell.");
-                return;
-            }
+                Console.WriteLine("[DEBUG] Refreshing portfolio value...");
 
-            var latestPrice = await _cryptoService.GetLatestPrice(SelectedSellCrypto);
-            if (latestPrice <= 0) return;
-
-            decimal totalRevenue = latestPrice * SellAmount;
-            _currentUser.Balance += totalRevenue;
-            await _databaseService.UpdateUserBalanceAsync(_currentUser.Id, _currentUser.Balance);
-
-            holding.Amount -= SellAmount;
-            if (holding.Amount == 0)
-            {
-                await _databaseService.DeleteTransactionAsync(holding.Id);
-                PortfolioHoldings.Remove(holding);
-            }
-            else
-            {
-                await _databaseService.UpdateTransactionAsync(holding);
-            }
-
-            await LoadPortfolioData();
-        }
-
-        private async Task LoadPortfolioData()
-        {
-            var holdings = await _databaseService.GetAllHoldingsAsync();
-            if (holdings == null || holdings.Count == 0) return;
-
-            PortfolioHoldings.Clear();
-            foreach (var holding in holdings)
-            {
-                var latestPrice = await _cryptoService.GetLatestPrice(holding.Symbol);
-                if (latestPrice > 0)
+                Console.WriteLine("[DEBUG] Fetching latest crypto prices...");
+                var latestPrices = await _cryptoService.FetchLivePrices();
+                if (latestPrices.Count == 0)
                 {
-                    TotalPortfolioValue += latestPrice * holding.Amount;
+                    Console.WriteLine("[ERROR] No live prices retrieved! API response is empty.");
+                    return; 
                 }
-                PortfolioHoldings.Add(holding);
-            }
+                Console.WriteLine("[DEBUG] Successfully fetched latest prices.");
 
-            PortfolioChange = 0;
+                var transactions = await _databaseService.GetUserTransactionsAsync(_currentUser.Id);
+                if (transactions.Count == 0) return;
+
+                decimal totalFinalValue = 0;
+                decimal totalInitialValue = 0;
+                decimal weightedPercentageChange = 0;
+
+                //  Map ticker symbols to CoinGecko API names
+                var symbolToApiName = new Dictionary<string, string>
+                {
+                    { "BTC", "bitcoin" },
+                    { "ETH", "ethereum" },
+                    { "SOL", "solana" }
+                };
+
+                foreach (var transaction in transactions)
+                {
+                    if (transaction.TransactionType != "BUY") continue;
+
+                    string cryptoKey = transaction.CryptoSymbol.ToUpper();
+
+                    Console.WriteLine($"[DEBUG] Processing transaction: {cryptoKey}, Amount: {transaction.Amount}, Buy Price: {transaction.PriceAtTransaction}");
+
+                    if (symbolToApiName.TryGetValue(cryptoKey, out string apiKey) && latestPrices.TryGetValue(apiKey, out var latestPrice))
+                    {
+                        Console.WriteLine($"[DEBUG] Latest {cryptoKey} price: {latestPrice}");
+
+                        transaction.FinalTotalValue = transaction.Amount * latestPrice;
+                        totalFinalValue += transaction.FinalTotalValue.GetValueOrDefault();
+                        totalInitialValue += transaction.TotalValue;
+
+                        transaction.PercentageChange = ((transaction.FinalTotalValue.GetValueOrDefault() - transaction.TotalValue) / transaction.TotalValue) * 100;
+                        weightedPercentageChange += transaction.PercentageChange.GetValueOrDefault() * transaction.TotalValue;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[ERROR] No latest price found for {cryptoKey}");
+                    }
+                }
+
+                // Store Weighted % Change in UI
+                PortfolioChange = totalInitialValue > 0 ? weightedPercentageChange / totalInitialValue : 0;
+
+                //  Set Total Portfolio Value (SUM of final_total_value from transactions)
+                TotalPortfolioValue = totalFinalValue;
+
+                Console.WriteLine($"[DEBUG] Updated Total Portfolio Value: {TotalPortfolioValue}");
+                Console.WriteLine($"[DEBUG] Weighted Portfolio Change: {PortfolioChange}%");
+
+                await _databaseService.UpdateTransactionFinalValues(_currentUser.Id, transactions);
+
+                OnPropertyChanged(nameof(TotalPortfolioValue));
+                OnPropertyChanged(nameof(PortfolioChange));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to refresh portfolio value: {ex.Message}");
+            }
         }
+
+
+
+
+
+
+
+
     }
 }

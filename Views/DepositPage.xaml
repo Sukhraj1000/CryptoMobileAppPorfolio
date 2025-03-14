@@ -19,14 +19,16 @@
         <CollectionView ItemsSource="{Binding UserDeposits}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="10" Margin="5">
-                        <StackLayout>
-                            <Label Text="{Binding Amount}" FontSize="16"/>
-                            <Label Text="{Binding DepositDate, StringFormat='yyyy-MM-dd HH:mm'}" FontSize="14" TextColor="Gray"/>
-                        </StackLayout>
+                    <Frame Padding="10" Margin="5" BorderColor="Gray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Amount}" FontSize="18" FontAttributes="Bold"/>
+                            <Label Text="{Binding DepositDate, StringFormat='{0:yyyy-MM-dd HH:mm}'}" 
+                                   FontSize="14" TextColor="Gray"/>
+                        </VerticalStackLayout>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
     </VerticalStackLayout>
 </ContentPage>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -7,6 +8,7 @@ using CommunityToolkit.Mvvm.Input;
 using CryptoApp.Interfaces;
 using CryptoApp.Models;
 using CryptoApp.Services;
+using Microsoft.Maui.ApplicationModel;
 
 namespace CryptoApp.ViewModels
 {
@@ -41,19 +43,33 @@ namespace CryptoApp.ViewModels
 
         private async Task LoadUserData()
         {
-            // Get logged-in user
-            _currentUser = AuthService.GetCurrentUser(); 
+            _currentUser = AuthService.GetCurrentUser();
             if (_currentUser != null)
             {
                 UserBalance = _currentUser.Balance;
+
                 var deposits = await _databaseService.GetUserDepositsAsync(_currentUser.Id);
-                UserDeposits.Clear();
-                foreach (var deposit in deposits)
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
                 {
-                    UserDeposits.Add(deposit);
-                }
+                    UserDeposits.Clear();
+                    foreach (var deposit in deposits
+                                 .OrderByDescending(d => d.DepositDate) 
+                                 .Take(6)) 
+                    {
+                        UserDeposits.Add(deposit);
+                    }
+                });
+
+                Console.WriteLine($"[DEBUG] Loaded {UserDeposits.Count} latest deposits.");
+            }
+            else
+            {
+                Console.WriteLine("[ERROR] No user is currently logged in.");
             }
         }
+
+
 
         private async Task DepositFunds()
         {
@@ -65,7 +81,12 @@ namespace CryptoApp.ViewModels
                 return;
             }
 
-            if (DepositAmount <= 0) return;
+            if (DepositAmount <= 0)
+            {
+                Console.WriteLine("[ERROR] Invalid deposit amount.");
+                await Application.Current.MainPage.DisplayAlert("Error", "Enter a valid amount.", "OK");
+                return;
+            }
 
             var deposit = new Deposit
             {
@@ -77,7 +98,12 @@ namespace CryptoApp.ViewModels
             await _databaseService.AddDepositAsync(deposit);
             user.Balance += DepositAmount;
             await _databaseService.UpdateUserBalanceAsync(user.Id, user.Balance);
+
+            await LoadUserData(); 
+
+            Console.WriteLine("[SUCCESS] Deposit added.");
         }
+
 
     }
 }

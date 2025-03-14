@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using CryptoApp.Converters;
 using CryptoApp.Helpers;
 using CryptoApp.Interfaces;
 using CryptoApp.Services;
