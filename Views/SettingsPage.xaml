@@ -1,15 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
              x:Class="CryptoApp.Views.SettingsPage"
              x:DataType="viewModels:SettingsViewModel"
-             Title="Settings">
+             Title="Settings"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}">
 
-    <VerticalStackLayout Padding="20">
-        <Label Text="Settings" FontSize="24" FontAttributes="Bold" HorizontalOptions="Center"/>
-        <Switch IsToggled="{Binding EnableNotifications}"/>
-        <Label Text="Enable Notifications" FontSize="18"/>
-        <Button Text="Sign Out" Command="{Binding SignOutCommand}" BackgroundColor="Red" TextColor="White"/>
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+            <Label Text="Settings" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
+            <!-- Notifications Section -->
+            <Frame Padding="16" 
+                   CornerRadius="10" 
+                   HasShadow="True"
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}"
+                   BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+                
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Notifications" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Enable Notifications" 
+                               VerticalOptions="Center"
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                        
+                        <Switch IsToggled="{Binding EnableNotifications}" 
+                                HorizontalOptions="EndAndExpand"
+                                OnColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Appearance Section -->
+            <Frame Padding="16" 
+                   CornerRadius="10" 
+                   HasShadow="True"
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}"
+                   BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+                
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Appearance" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                    
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Dark Theme" 
+                               VerticalOptions="Center"
+                               FontSize="16"
+                               TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                        
+                        <Switch IsToggled="{Binding IsDarkTheme}" 
+                                HorizontalOptions="EndAndExpand"
+                                OnColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"/>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Account Section -->
+            <Frame Padding="16" 
+                   CornerRadius="10" 
+                   HasShadow="True"
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}"
+                   BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+                
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Account" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                    
+                    <Button Text="Sign Out" 
+                            Command="{Binding SignOutCommand}" 
+                            BackgroundColor="Red" 
+                            TextColor="White"
+                            HorizontalOptions="Fill"/>
+                </VerticalStackLayout>
+            </Frame>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -3,34 +3,87 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CryptoApp.Views.PortfolioPage"
              Title="Portfolio"
-             BackgroundColor="White">
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}">
 
     <VerticalStackLayout Padding="20">
 
         <!-- User Balance -->
-        <Border StrokeShape="RoundRectangle 10">
-            <VerticalStackLayout Padding="10" BackgroundColor="#F5F5F5">
-                <Label Text="Available Balance" FontSize="18" TextColor="Black"/>
-                <Label Text="{Binding UserBalance, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold" TextColor="Green"/>
+        <Border StrokeShape="RoundRectangle 10" 
+               Stroke="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+            <VerticalStackLayout Padding="10" 
+                               BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}">
+                <Label Text="Available Balance" 
+                       FontSize="18" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                <Label Text="{Binding UserBalance, StringFormat='${0:N2}'}" 
+                       FontSize="22" 
+                       FontAttributes="Bold" 
+                       TextColor="Green"/>
             </VerticalStackLayout>
         </Border>
 
         <!-- Refresh Portfolio Button -->
-        <Button Text="Refresh Prices" Command="{Binding RefreshPortfolioCommand}"
-                BackgroundColor="#007AFF" TextColor="White" Margin="0,10,0,10"/>
+        <Button Text="Refresh Prices" 
+                Command="{Binding RefreshPortfolioCommand}"
+                BackgroundColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}" 
+                TextColor="White" 
+                Margin="0,10,0,10"/>
 
         <!-- Buy Section -->
-        <StackLayout>
-            <Picker Title="Select Crypto" ItemsSource="{Binding AvailableCryptos}" SelectedItem="{Binding SelectedBuyCrypto}" />
-            <Entry Placeholder="Amount to Buy" Keyboard="Numeric" Text="{Binding BuyAmount}" />
-            <Button Text="Confirm Buy" Command="{Binding BuyCryptoCommand}" BackgroundColor="Green" TextColor="White"/>
-        </StackLayout>
+        <Frame Padding="16" 
+               CornerRadius="10" 
+               HasShadow="True"
+               BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}"
+               BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+            <StackLayout>
+                <Label Text="Buy Crypto" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       Margin="0,0,0,10"/>
+                <Picker Title="Select Crypto" 
+                        ItemsSource="{Binding AvailableCryptos}" 
+                        SelectedItem="{Binding SelectedBuyCrypto}"
+                        TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#404040}"/>
+                <Label Text="{Binding SelectedCryptoPrice}" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       FontSize="14"
+                       Margin="0,5,0,0"/>
+                <Entry Placeholder="Amount to Buy" 
+                       Keyboard="Numeric" 
+                       Text="{Binding BuyAmount, Mode=TwoWay}"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       BackgroundColor="{AppThemeBinding Light=White, Dark=#404040}"/>
+                <Label Text="{Binding TotalPrice, StringFormat='Total Cost: ${0:N2}'}" 
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       Margin="0,5,0,10"/>
+                <Button Text="Confirm Buy" 
+                        Command="{Binding BuyCryptoCommand}" 
+                        BackgroundColor="Green" 
+                        TextColor="White"
+                        Margin="0,0,0,0"/>
+            </StackLayout>
+        </Frame>
 
         <!-- Portfolio Value -->
-        <Border StrokeShape="RoundRectangle 10">
-            <VerticalStackLayout Padding="10" BackgroundColor="#F5F5F5">
-                <Label Text="Total Portfolio Value" FontSize="18" TextColor="Black"/>
-                <Label Text="{Binding TotalPortfolioValue, StringFormat='${0:N2}'}" FontSize="22" FontAttributes="Bold"/>
+        <Frame Padding="16" 
+               Margin="0,10,0,10" 
+               CornerRadius="10" 
+               HasShadow="True"
+               BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}"
+               BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}">
+            <VerticalStackLayout>
+                <Label Text="Total Portfolio Value" 
+                       FontSize="18" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
+                <Label Text="{Binding TotalPortfolioValue, StringFormat='${0:N2}'}" 
+                       FontSize="22" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
         
                 <!--  Show Weighted % Change -->
                 <Label Text="{Binding PortfolioChange, StringFormat='{0:N2}% Change'}"
@@ -38,32 +91,61 @@
                        FontAttributes="Bold"
                        TextColor="{Binding PortfolioChange, Converter={StaticResource PercentageColorConverter}}"/>
             </VerticalStackLayout>
-        </Border>
+        </Frame>
 
         <!-- Holdings List -->
-        <CollectionView ItemsSource="{Binding PortfolioHoldings}">
+        <Label Text="Your Holdings" 
+               FontSize="18" 
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+               Margin="0,10,0,5"/>
+               
+        <CollectionView ItemsSource="{Binding PortfolioHoldings}"
+                        BackgroundColor="Transparent">
+            <CollectionView.EmptyView>
+                <Label Text="No holdings found. Buy some crypto to get started!"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"/>
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border StrokeShape="RoundRectangle 10">
-                        <VerticalStackLayout Padding="10" BackgroundColor="White">
-                            <Label Text="{Binding CryptoSymbol}" FontSize="18" FontAttributes="Bold"/>
+                    <Frame Margin="0,5" 
+                           Padding="10" 
+                           CornerRadius="10"
+                           BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}"
+                           BackgroundColor="{AppThemeBinding Light=White, Dark=#2D2D2D}">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding CryptoSymbol}" 
+                                   FontSize="18" 
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
 
                             <HorizontalStackLayout>
-                                <Label Text="{Binding Amount, StringFormat='Qty: {0:N4}'}" FontSize="14"/>
-                                <Label Text=" | " FontSize="14"/>
-                                <Label Text="{Binding PriceAtTransaction, StringFormat='Bought: ${0:N2}'}" FontSize="14"/>
-                                <Label Text=" | " FontSize="14"/>
-                                <Label Text="{Binding CurrentPrice, StringFormat='Now: ${0:N2}'}" FontSize="14"/>
+                                <Label Text="{Binding Amount, StringFormat='Qty: {0:N4}'}" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#404040, Dark=#ACACAC}"/>
+                                <Label Text=" | " 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#6E6E6E, Dark=#919191}"/>
+                                <Label Text="{Binding PriceAtTransaction, StringFormat='Bought: ${0:N2}'}" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#404040, Dark=#ACACAC}"/>
+                                <Label Text=" | " 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#6E6E6E, Dark=#919191}"/>
+                                <Label Text="{Binding CurrentPrice, StringFormat='Now: ${0:N2}'}" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#404040, Dark=#ACACAC}"/>
                             </HorizontalStackLayout>
 
                             <!--  Show individual % change per transaction -->
-                            <Label Text="{Binding PortfolioChange, StringFormat='{0:N2}% Change'}"
+                            <Label Text="{Binding PercentageChange, StringFormat='{0:N2}% Change'}"
                                    FontSize="16"
                                    FontAttributes="Bold"
-                                   TextColor="{Binding PortfolioChange, Converter={StaticResource PercentageColorConverter}}"/>
-
+                                   TextColor="{Binding PercentageChange, Converter={StaticResource PercentageColorConverter}}"/>
                         </VerticalStackLayout>
-                    </Border>
+                    </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

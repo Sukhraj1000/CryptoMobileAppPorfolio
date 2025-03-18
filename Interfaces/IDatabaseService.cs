@@ -25,11 +25,18 @@ namespace CryptoApp.Interfaces
         Task<List<Transaction>> GetAllHoldingsAsync();
 
         // Percentage Change Tracking
-        Task UpdatePortfolioPercentageChange(Guid userId, List<Transaction> transactions);
         Task UpdateTransactionFinalValues(Guid userId, List<Transaction> transactions);
 
         // Deposits 
         Task<List<Deposit>> GetUserDepositsAsync(Guid userId);
         Task AddDepositAsync(Deposit deposit);
+        
+        //
+        Task UpdateWatchlistEntry(Watchlist entry);
+
+        Task<List<Watchlist>> GetWatchlistAsync();
+        Task UpdateWatchlistPrices(Dictionary<string, decimal> latestPrices);
+
     }
+    
 }

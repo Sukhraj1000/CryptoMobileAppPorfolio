@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:views="clr-namespace:CryptoApp.Views"
+            x:Class="CryptoApp.Views.MainContainer"
+            BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}"
+            BarBackgroundColor="{AppThemeBinding Light=White, Dark=#121212}"
+            BarTextColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+            SelectedTabColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+            UnselectedTabColor="{AppThemeBinding Light=#919191, Dark=#404040}">
+    
+</TabbedPage> 

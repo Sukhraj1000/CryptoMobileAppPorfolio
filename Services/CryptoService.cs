@@ -24,7 +24,7 @@ namespace CryptoApp.Services
         }
 
         /// Fetches live prices for the watchlist cryptos.
-        public async Task<Dictionary<string, decimal>> FetchLivePrices()
+        public async Task<(bool success, Dictionary<string, decimal> prices)> FetchLivePrices()
         {
             try
             {
@@ -41,7 +41,7 @@ namespace CryptoApp.Services
                 }
 
                 var parsedPrices = prices.ToDictionary(
-                    p => p.Key.ToLower(), 
+                    p => p.Key.ToLower(),
                     p => p.Value["usd"]
                 );
 
@@ -51,17 +51,14 @@ namespace CryptoApp.Services
                     Console.WriteLine($"[DEBUG] {price.Key}: ${price.Value}");
                 }
 
-                return parsedPrices;
+                return (true, parsedPrices);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] Failed to fetch live prices: {ex.Message}");
-                return new Dictionary<string, decimal>();
+                return (false, new Dictionary<string, decimal>()); 
             }
         }
-
-
-
 
 
         /// Fetches the latest price for a specific cryptocurrency.

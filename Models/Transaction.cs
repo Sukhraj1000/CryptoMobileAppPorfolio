@@ -33,10 +33,10 @@ namespace CryptoApp.Models
         public decimal TotalValue { get; set; } = 0;
 
         [Column("percentage_change")]
-        public decimal? PercentageChange { get; set; } = 0;
+        public decimal PercentageChange { get; set; } = 0;
 
         [Column("final_total_value")]
-        public decimal? FinalTotalValue { get; set; } = 0;
+        public decimal FinalTotalValue { get; set; } = 0;
 
     }
 }

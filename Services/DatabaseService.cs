@@ -316,27 +316,7 @@ namespace CryptoApp.Services
         Console.WriteLine($"[ERROR] Failed to update portfolio percentage changes: {ex.Message}");
     }
 }
-
-        public async Task UpdateTransactionPercentageChange(Guid transactionId, decimal percentageChange)
-        {
-            try
-            {
-                Console.WriteLine($"[DEBUG] Updating percentage change for Transaction ID: {transactionId}");
-
-                var response = await _client.Rpc("update_transaction_percentage", new
-                {
-                    transaction_id = transactionId,
-                    new_percentage = percentageChange
-                });
-
-                Console.WriteLine($"[DEBUG] Successfully updated percentage change for {transactionId}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to update percentage change: {ex.Message}");
-            }
-        }
-
+        
         public async Task UpdateTransactionFinalValues(Guid userId, List<Transaction> transactions)
         {
             try
@@ -345,21 +325,115 @@ namespace CryptoApp.Services
 
                 foreach (var transaction in transactions)
                 {
-                    await _client.Rpc("update_transaction_final_values", new
+                    Console.WriteLine($"[DEBUG] Updating Transaction ID: {transaction.Id} | Final Value: {transaction.FinalTotalValue} | % Change: {transaction.PercentageChange}");
+
+                    var updateResult = await _client.Rpc("update_transaction_final_values", new
                     {
                         transaction_id = transaction.Id,
                         new_final_value = transaction.FinalTotalValue,
                         new_percentage_change = transaction.PercentageChange
                     });
+
+                    Console.WriteLine($"[DEBUG] Update result: {updateResult}");
                 }
 
-                Console.WriteLine("[DEBUG] Successfully updated final total values in the database.");
+                Console.WriteLine("[DEBUG] Successfully updated transaction values in the database.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"[ERROR] Failed to update transaction values: {ex.Message}");
             }
         }
+        
+        
+        public async Task UpdateWatchlistPrices(Dictionary<string, decimal> latestPrices)
+        {
+            try
+            {
+                Console.WriteLine("[DEBUG] Updating watchlist prices in database...");
+
+                var watchlistEntries = await GetWatchlistAsync(); // Get existing watchlist from DB
+                if (watchlistEntries == null || watchlistEntries.Count == 0)
+                {
+                    Console.WriteLine("[ERROR] No watchlist entries found.");
+                    return;
+                }
+
+                foreach (var entry in watchlistEntries)
+                {
+                    if (latestPrices.TryGetValue(entry.CryptoSymbol.ToLower(), out var latestPrice))
+                    {
+                        Console.WriteLine($"[DEBUG] Updating {entry.CryptoSymbol} price: {latestPrice}");
+
+                        entry.LastPrice = latestPrice;
+                        entry.LastUpdated = DateTime.UtcNow;
+
+                        await UpdateWatchlistEntry(entry);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[ERROR] No latest price found for {entry.CryptoSymbol}, skipping update.");
+                    }
+                }
+
+                Console.WriteLine("[DEBUG] Watchlist prices updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to update watchlist prices: {ex.Message}");
+            }
+        }
+        public async Task UpdateWatchlistEntry(Watchlist entry)
+        {
+            try
+            {
+                Console.WriteLine($"[DEBUG] Saving updated entry: {entry.CryptoSymbol} - {entry.LastPrice}");
+
+                await _client
+                    .From<Watchlist>()
+                    .Match(new Dictionary<string, string> { { "crypto_symbol", entry.CryptoSymbol } }) 
+                    .Update(entry);
+
+                Console.WriteLine($"[DEBUG] Successfully updated {entry.CryptoSymbol} in watchlist.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to update watchlist entry: {ex.Message}");
+            }
+        }
+
+
+
+
+
+
+
+
+        public async Task<List<Watchlist>> GetWatchlistAsync()
+        {
+            try
+            {
+                Console.WriteLine("[DEBUG] Fetching stored watchlist prices...");
+
+                var response = await _client
+                    .From<Watchlist>()
+                    .Filter("crypto_symbol", Constants.Operator.In, new List<string> { "BTC", "ETH", "SOL" }) 
+                    .Get();
+
+                Console.WriteLine("[DEBUG] Watchlist retrieved successfully.");
+
+                return response.Models;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to fetch watchlist: {ex.Message}");
+                return new List<Watchlist>();
+            }
+        }
+
+
+
+
 
 
 

@@ -1,31 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
+             xmlns:models="clr-namespace:CryptoApp.Models"
              x:Class="CryptoApp.Views.HomePage"
              x:DataType="viewModels:HomeViewModel"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}"
              Title="Home">
 
-    <VerticalStackLayout Padding="20">
+    <VerticalStackLayout Padding="20" Spacing="10">
         <Label Text="Welcome to Your Crypto Portfolio!" 
-               FontSize="24" 
-               FontAttributes="Bold" 
-               HorizontalOptions="Center"/>
-        <Label Text="{Binding TotalPortfolioValue, StringFormat='Portfolio Value: {0:C}'}"/>
-        <Label Text="{Binding PortfolioChange, StringFormat='Change: {0:N2}%'}"/>
-        <CollectionView ItemsSource="{Binding Watchlist}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <StackLayout>
-                        <Label Text="{Binding Name}" />
-                        <Label Text="{Binding Price, StringFormat='${0:F2}'}" />
-                    </StackLayout>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-        <Button Text="Add Sample Transaction" Command="{Binding AddSampleCommand}"/>
-        <Button Text="Refresh Prices" Command="{Binding RefreshCommand}" />
+               FontSize="22" 
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+               HorizontalOptions="Center" />
+        
+        <Label Text="Watchlist" 
+               FontSize="18" 
+               FontAttributes="Bold"
+               TextColor="{AppThemeBinding Light=Black, Dark=White}"
+               Margin="0,10,0,5" />
 
+        <Button Text="Refresh Watchlist Prices"
+                Command="{Binding RefreshWatchlistCommand}"
+                BackgroundColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="40"
+                VerticalOptions="Start"/>
 
+        <!-- Watchlist UI -->
+        <Frame BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+               BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
+               Padding="10" 
+               CornerRadius="10"
+               HeightRequest="400"
+               VerticalOptions="FillAndExpand">
+            
+            <CollectionView ItemsSource="{Binding WatchlistItems}" 
+                            BackgroundColor="Transparent"
+                            VerticalOptions="Fill">
+                <CollectionView.EmptyView>
+                    <Label Text="No watchlist items found. Please add some cryptocurrencies."
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Watchlist">
+                        <Frame Margin="5" 
+                               Padding="10" 
+                               BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                               BackgroundColor="{AppThemeBinding Light=White, Dark=#2D2D2D}">
+                            <Grid Padding="5" RowSpacing="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                
+                                <Label Grid.Row="0" 
+                                       Text="{Binding CryptoSymbol}" 
+                                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                       FontSize="18"
+                                       FontAttributes="Bold"/>
+
+                                <Label Grid.Row="1" 
+                                       Text="{Binding LastPrice, StringFormat='Price: ${0:F2}'}" 
+                                       FontSize="16"
+                                       TextColor="Green"/>
+
+                                <Label Grid.Row="2" 
+                                       Text="{Binding LastUpdated, StringFormat='Last Updated: {0:yyyy-MM-dd HH:mm:ss}'}" 
+                                       FontSize="14"
+                                       TextColor="{AppThemeBinding Light=#919191, Dark=#ACACAC}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
     </VerticalStackLayout>
-
 </ContentPage>

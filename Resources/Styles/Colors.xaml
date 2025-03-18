@@ -42,4 +42,64 @@
     <SolidColorBrush x:Key="Gray600Brush" Color="{StaticResource Gray600}"/>
     <SolidColorBrush x:Key="Gray900Brush" Color="{StaticResource Gray900}"/>
     <SolidColorBrush x:Key="Gray950Brush" Color="{StaticResource Gray950}"/>
+
+    <!-- Theme Colors -->
+    <!-- Light Theme (Default) -->
+    <Color x:Key="LightBackground">White</Color>
+    <Color x:Key="LightText">Black</Color>
+    <Color x:Key="LightPrimary">#512BD4</Color>
+    <Color x:Key="LightSecondary">#DFD8F7</Color>
+    <Color x:Key="LightCardBackground">#F5F5F5</Color>
+    <Color x:Key="LightFrameBorder">#E0E0E0</Color>
+    
+    <!-- Dark Theme -->
+    <Color x:Key="DarkBackground">#121212</Color>
+    <Color x:Key="DarkText">White</Color>
+    <Color x:Key="DarkPrimary">#9880e5</Color>
+    <Color x:Key="DarkSecondary">#2B0B98</Color>
+    <Color x:Key="DarkCardBackground">#2D2D2D</Color>
+    <Color x:Key="DarkFrameBorder">#3D3D3D</Color>
+    
+    <!-- App Theme Bindings -->
+    <OnPlatform x:Key="AppBackground" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
+    </OnPlatform>
+    
+    <OnPlatform x:Key="AppText" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}" />
+    </OnPlatform>
+    
+    <OnPlatform x:Key="AppPrimary" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}" />
+    </OnPlatform>
+    
+    <OnPlatform x:Key="AppSecondary" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightSecondary}, Dark={StaticResource DarkSecondary}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightSecondary}, Dark={StaticResource DarkSecondary}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightSecondary}, Dark={StaticResource DarkSecondary}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightSecondary}, Dark={StaticResource DarkSecondary}}" />
+    </OnPlatform>
+    
+    <OnPlatform x:Key="AppCardBackground" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightCardBackground}, Dark={StaticResource DarkCardBackground}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightCardBackground}, Dark={StaticResource DarkCardBackground}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightCardBackground}, Dark={StaticResource DarkCardBackground}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightCardBackground}, Dark={StaticResource DarkCardBackground}}" />
+    </OnPlatform>
+    
+    <OnPlatform x:Key="AppFrameBorder" x:TypeArguments="Color">
+        <On Platform="Android" Value="{AppThemeBinding Light={StaticResource LightFrameBorder}, Dark={StaticResource DarkFrameBorder}}" />
+        <On Platform="iOS" Value="{AppThemeBinding Light={StaticResource LightFrameBorder}, Dark={StaticResource DarkFrameBorder}}" />
+        <On Platform="WinUI" Value="{AppThemeBinding Light={StaticResource LightFrameBorder}, Dark={StaticResource DarkFrameBorder}}" />
+        <On Platform="MacCatalyst" Value="{AppThemeBinding Light={StaticResource LightFrameBorder}, Dark={StaticResource DarkFrameBorder}}" />
+    </OnPlatform>
 </ResourceDictionary>
