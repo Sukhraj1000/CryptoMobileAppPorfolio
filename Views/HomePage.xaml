@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CryptoApp.ViewModels"
+             xmlns:models="clr-namespace:CryptoApp.Models"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="CryptoApp.Views.HomePage"
+             x:DataType="viewModels:HomeViewModel"
+             BackgroundColor="{AppThemeBinding Light=White, Dark=#121212}"
+             Title="Home">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="16">
+            <!-- Page Header -->
+            <Label Text="Crypto Dashboard" 
+                   FontSize="28" 
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                   HorizontalOptions="Center"
+                   Margin="0,8,0,0" />
+                   
+            <!-- Welcome Message -->
+            <Label Text="Welcome to your crypto portfolio tracker!" 
+                   FontSize="16" 
+                   TextColor="{AppThemeBinding Light=#707070, Dark=#A0A0A0}"
+                   HorizontalOptions="Center"
+                   Margin="0,0,0,8" />
+            
+            <!-- Watchlist Header -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+                <Label Grid.Column="0"
+                       Text="Watchlist" 
+                       FontSize="22" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       VerticalOptions="Center" />
+                       
+                <Button Grid.Column="1"
+                        Text="Refresh"
+                        Command="{Binding RefreshWatchlistCommand}"
+                        BackgroundColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="40"
+                        WidthRequest="100"
+                        Padding="12,0"
+                        VerticalOptions="Center"/>
+            </Grid>
+
+            <!-- Watchlist Content -->
+            <Frame BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
+                   Padding="12" 
+                   CornerRadius="12"
+                   HasShadow="False"
+                   MinimumHeightRequest="300"
+                   VerticalOptions="FillAndExpand">
+                
+                <CollectionView ItemsSource="{Binding WatchlistItems}" 
+                                BackgroundColor="Transparent"
+                                VerticalOptions="Fill">
+                    <CollectionView.EmptyView>
+                        <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20">
+                            <Label Text="No cryptocurrencies in your watchlist"
+                                   TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                   HorizontalOptions="Center"
+                                   FontSize="16"/>
+                            <Label Text="Your watchlist items will appear here"
+                                   TextColor="{AppThemeBinding Light=#707070, Dark=#A0A0A0}"
+                                   HorizontalOptions="Center"
+                                   FontSize="14"
+                                   Margin="0,8,0,0"/>
+                        </VerticalStackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Watchlist">
+                            <Frame Margin="0,6" 
+                                   Padding="16" 
+                                   BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                                   BackgroundColor="{AppThemeBinding Light=White, Dark=#2D2D2D}"
+                                   CornerRadius="8"
+                                   HasShadow="False">
+                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto" RowSpacing="12">
+                                    <!-- Last Updated - Moved to top row -->
+                                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3"
+                                           Text="{Binding LastUpdated, StringFormat='Updated: {0:yyyy-MM-dd HH:mm}'}" 
+                                           FontSize="12"
+                                           TextColor="{AppThemeBinding Light=#919191, Dark=#ACACAC}"
+                                           Margin="0,0,0,4"/>
+                                           
+                                    <!-- Crypto Symbol - Moved to second row -->
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Text="{Binding CryptoSymbol}" 
+                                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                                           FontSize="28"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                    
+                                    <!-- Price - Moved to second row -->
+                                    <Label Grid.Row="1" Grid.Column="2"
+                                           Text="{Binding LastPrice, StringFormat='${0:F2}'}" 
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           TextColor="Green"
+                                           HorizontalOptions="End"
+                                           VerticalOptions="Center"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Frame>
+            
+            <!-- Price History Charts Section -->
+            <Grid ColumnDefinitions="*,Auto" Margin="0,8,0,0">
+                <Label Grid.Column="0"
+                       Text="7-Day Price History" 
+                       FontSize="22" 
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                       VerticalOptions="Center" />
+                       
+                <Button Grid.Column="1"
+                        Text="Refresh"
+                        Command="{Binding RefreshChartsCommand}"
+                        BackgroundColor="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="40"
+                        WidthRequest="100"
+                        Padding="12,0"
+                        VerticalOptions="Center"/>
+            </Grid>
+            
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoadingCharts}" 
+                               IsVisible="{Binding IsLoadingCharts}" 
+                               Color="{AppThemeBinding Light=#512BD4, Dark=#9880e5}"
+                               HeightRequest="40"
+                               WidthRequest="40"
+                               HorizontalOptions="Center"/>
+            
+            <!-- Bitcoin Chart -->
+            <Frame BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
+                   Padding="16" 
+                   CornerRadius="12"
+                   HasShadow="False"
+                   IsVisible="{Binding BtcChart, Converter={StaticResource NotNullConverter}}">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <Label Grid.Row="0"
+                           Text="Bitcoin (BTC)" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           Margin="0,0,0,4"/>
+                    
+                    <Label Grid.Row="1"
+                           Text="7-Day Price History" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light=#707070, Dark=#A0A0A0}"
+                           Margin="0,0,0,8"/>
+                    
+                    <microcharts:ChartView Grid.Row="2"
+                                          Chart="{Binding BtcChart}"
+                                          HeightRequest="200"
+                                          Margin="0,8,0,4"
+                                          BackgroundColor="Transparent"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Ethereum Chart -->
+            <Frame BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
+                   Padding="16" 
+                   CornerRadius="12"
+                   HasShadow="False"
+                   IsVisible="{Binding EthChart, Converter={StaticResource NotNullConverter}}">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <Label Grid.Row="0"
+                           Text="Ethereum (ETH)" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           Margin="0,0,0,4"/>
+                    
+                    <Label Grid.Row="1"
+                           Text="7-Day Price History" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light=#707070, Dark=#A0A0A0}"
+                           Margin="0,0,0,8"/>
+                    
+                    <microcharts:ChartView Grid.Row="2"
+                                          Chart="{Binding EthChart}"
+                                          HeightRequest="200"
+                                          Margin="0,8,0,4"
+                                          BackgroundColor="Transparent"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Solana Chart -->
+            <Frame BorderColor="{AppThemeBinding Light=#E0E0E0, Dark=#3D3D3D}" 
+                   BackgroundColor="{AppThemeBinding Light=#F5F5F5, Dark=#2D2D2D}" 
+                   Padding="16" 
+                   CornerRadius="12"
+                   HasShadow="False"
+                   IsVisible="{Binding SolChart, Converter={StaticResource NotNullConverter}}">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <Label Grid.Row="0"
+                           Text="Solana (SOL)" 
+                           FontSize="20" 
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"
+                           Margin="0,0,0,4"/>
+                    
+                    <Label Grid.Row="1"
+                           Text="7-Day Price History" 
+                           FontSize="14" 
+                           TextColor="{AppThemeBinding Light=#707070, Dark=#A0A0A0}"
+                           Margin="0,0,0,8"/>
+                    
+                    <microcharts:ChartView Grid.Row="2"
+                                          Chart="{Binding SolChart}"
+                                          HeightRequest="200"
+                                          Margin="0,8,0,4"
+                                          BackgroundColor="Transparent"/>
+                </Grid>
+            </Frame>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

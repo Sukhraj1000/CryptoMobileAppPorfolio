@@ -1,0 +1,57 @@
+# .NET MAUI Project gitignore
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / Rider cache files
+.vs/
+.vscode/
+.idea/
+*.userprefs
+*.usertasks
+*.user
+*.suo
+*.cache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Framework files that cause codesign issues
+*.xattr
+.gitattributes
+
+# Backup folders
+*-backup/
+*_backup/
+.git-backup/
+
+# Resource file backups
+_rels
+package
+*.bak
+*-bak
+
+# Environment and local config
+*.env
+*.local
+*local.json
+appsettings.local.json 
